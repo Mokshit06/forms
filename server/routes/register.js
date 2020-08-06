@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
+const { sendWelcomeEmail } = require('../email/email');
 
 router.post('/', async (req, res) => {
   try {
@@ -9,8 +10,19 @@ router.post('/', async (req, res) => {
 
     const newUser = { name, email, password: hashedPassword };
 
-    await User.create(newUser);
-    res.status(201).send();
+    const user = await User.create(newUser);
+
+    sendWelcomeEmail({
+      email: user.email,
+      name: user.name,
+    });
+
+    req.login(user, err => {
+      if (err) {
+        return next(err);
+      }
+      return res.status(201).send(user);
+    });
   } catch (error) {
     res.status(400).json({
       message: error.errors[Object.keys(error.errors)].properties.message,

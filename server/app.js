@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const initializePassport = require('./config/passport');
 const morgan = require('morgan');
 const cors = require('cors');
+const { ensureAuthenticated, ensureGuest } = require('./middleware/auth');
 
 const app = express();
 
@@ -17,7 +18,9 @@ initializePassport(passport);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-if (process.env.NODE_ENV !== 'production') {
+const { SESSION_SECRET, NODE_ENV, PORT } = process.env;
+
+if (NODE_ENV !== 'production') {
   require('dotenv').config();
   app.use(morgan('dev'));
   app.use(cors());
@@ -25,7 +28,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: SESSION_SECRET,
     saveUninitialized: false,
     resave: false,
     store: new MongoStore({
@@ -37,30 +40,24 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/api/register', require('./routes/register'));
+app.use('/api/response', require('./routes/response'));
+app.use('/api/forms', require('./routes/form'));
+app.use('/api/register', ensureGuest, require('./routes/register'));
+app.use('/api/login', ensureGuest, require('./routes/login'));
 
-app.post('/api/login', (req, res, next) => {
-  passport.authenticate('local', (err, user, message) => {
-    if (err) {
-      return next('Something went wrong');
-    }
+app.delete('/api/logout', ensureAuthenticated, (req, res) => {
+  req.logout();
+  res.send({
+    message: 'Logged out',
+  });
+});
 
-    if (!user) {
-      return res.status(404).json({ message });
-    }
-
-    req.login(user, err => {
-      if (err) {
-        return next('Something went wrong');
-      }
-      res.send('Logged in');
-    });
-  })(req, res, next);
+app.get('/user/me', ensureAuthenticated, (req, res) => {
+  res.send(req.user);
 });
 
 //todo Remove from production
-app.get('/api', async (req, res) => {
-  console.log('Loading...');
+app.get('/api', ensureGuest, async (req, res) => {
   const users = await User.find({});
   res.send(users);
 });
@@ -68,7 +65,5 @@ app.get('/api', async (req, res) => {
 app.use((error, req, res, next) => {
   res.status(500).send({ error });
 });
-
-const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => console.log(`Server running on ${PORT}`));

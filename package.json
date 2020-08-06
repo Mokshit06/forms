@@ -23,6 +23,7 @@
     "morgan": "^1.10.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
+    "shortid": "^2.2.15",
     "validator": "^13.1.1"
   },
   "devDependencies": {

@@ -28,6 +28,15 @@ const userSchema = new mongoose.Schema({
 
 userSchema.plugin(uniqueValidator, { message: '{VALUE} is already in use' });
 
+userSchema.methods.toJSON = function () {
+  const user = this.toObject();
+
+  delete user.password;
+  delete user.__v;
+
+  return user;
+};
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
