@@ -44,16 +44,13 @@ app.use('/api/response', require('./routes/response'));
 app.use('/api/forms', require('./routes/form'));
 app.use('/api/register', ensureGuest, require('./routes/register'));
 app.use('/api/login', ensureGuest, require('./routes/login'));
+app.use('/user/me', ensureAuthenticated, require('./routes/user'));
 
 app.delete('/api/logout', ensureAuthenticated, (req, res) => {
   req.logout();
   res.send({
     message: 'Logged out',
   });
-});
-
-app.get('/user/me', ensureAuthenticated, (req, res) => {
-  res.send(req.user);
 });
 
 //todo Remove from production

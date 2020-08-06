@@ -13,9 +13,7 @@ const sendWelcomeEmail = ({ email, name }) => {
   });
 };
 
-const sendResponseEmail = ({ respondeeEmail, creatorEmail, response }) => {
-  const responseText = '';
-
+const sendResponseEmail = ({ respondeeEmail, creatorEmail, responseText }) => {
   sgMail.send({
     to: creatorEmail,
     from: masterEmail,

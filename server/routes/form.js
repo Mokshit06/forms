@@ -14,7 +14,9 @@ router.post('/', ensureAuthenticated, async (req, res) => {
     const form = await Form.create(newForm);
 
     res.status(201).send(form);
-  } catch (error) {}
+  } catch (error) {
+    res.status(500).send('Something went wrong');
+  }
 });
 
 router.get('/:shortid', async (req, res) => {
@@ -29,7 +31,9 @@ router.get('/:shortid', async (req, res) => {
     }
 
     res.send(form);
-  } catch (error) {}
+  } catch (error) {
+    res.status(500).send('Something went wrong');
+  }
 });
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const shortid = require('shortid');
+const Response = require('./response');
 
 const formSchema = new mongoose.Schema({
   user: {
@@ -29,15 +30,17 @@ const formSchema = new mongoose.Schema({
   ],
 });
 
-formSchema.pre('save', function (next) {
+formSchema.pre('save', function () {
   const form = this;
   form.fields.unshift({
-    fieldName: 'Enter your email',
+    fieldName: 'Email',
     fieldType: 'text',
     fieldPlaceHolder: 'Enter your email',
   });
+});
 
-  next();
+formSchema.pre('remove', async function () {
+  await Response.deleteMany({ form: this.id });
 });
 
 const Form = mongoose.model('Form', formSchema);

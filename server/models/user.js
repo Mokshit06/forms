@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const uniqueValidator = require('mongoose-unique-validator');
+const Form = require('./form');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -36,6 +37,14 @@ userSchema.methods.toJSON = function () {
 
   return user;
 };
+
+userSchema.pre('remove', async function () {
+  const forms = await Form.find({ user: this.id });
+
+  for (let index in forms) {
+    await forms[index].remove();
+  }
+});
 
 const User = mongoose.model('User', userSchema);
 

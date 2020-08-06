@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const passport = require('passport');
 
 router.post('/', (req, res, next) => {
   passport.authenticate('local', (err, user, message) => {
@@ -14,7 +15,7 @@ router.post('/', (req, res, next) => {
       if (err) {
         return next('Something went wrong');
       }
-      res.send('Logged in');
+      res.send({ message: 'Logged in' });
     });
   })(req, res, next);
 });

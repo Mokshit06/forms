@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const responseSchema = new mongoose.Schema({
   // user: {
@@ -9,6 +10,15 @@ const responseSchema = new mongoose.Schema({
   form: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'form',
+  },
+  respondee: {
+    type: String,
+    required: true,
+    validate(value) {
+      if (!validator.isEmail(value)) {
+        throw new Error('Please enter email');
+      }
+    },
   },
   fields: [
     {
