@@ -3,7 +3,9 @@ const ensureAuthenticated = (req, res, next) => {
     return next();
   }
 
-  res.json({ message: 'You need to log in before accessing this page' });
+  res
+    .status(400)
+    .json({ message: 'You need to log in before accessing this page' });
 };
 
 const ensureGuest = (req, res, next) => {

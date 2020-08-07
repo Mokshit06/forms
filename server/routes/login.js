@@ -15,7 +15,7 @@ router.post('/', (req, res, next) => {
       if (err) {
         return next('Something went wrong');
       }
-      res.send({ message: 'Logged in' });
+      res.send(user);
     });
   })(req, res, next);
 });

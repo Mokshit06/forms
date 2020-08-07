@@ -54,7 +54,7 @@ app.delete('/api/logout', ensureAuthenticated, (req, res) => {
 });
 
 //todo Remove from production
-app.get('/api', ensureGuest, async (req, res) => {
+app.get('/api', ensureAuthenticated, async (req, res) => {
   const users = await User.find({});
   res.send(users);
 });

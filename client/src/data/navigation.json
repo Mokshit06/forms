@@ -1,0 +1,28 @@
+{
+  "navbarLinks": [
+    {
+      "name": "home",
+      "title": "Home",
+      "link": "/",
+      "auth": true
+    },
+    {
+      "name": "login",
+      "title": "Login",
+      "link": "/login",
+      "guest": true
+    },
+    {
+      "name": "register",
+      "title": "Signin",
+      "link": "/signin",
+      "guest": true
+    },
+    {
+      "name": "form",
+      "title": "Form",
+      "link": "/forms",
+      "auth": true
+    }
+  ]
+}
