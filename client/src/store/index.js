@@ -12,16 +12,29 @@ export default new Vuex.Store({
       state.user = user;
     },
   },
+  getters: {
+    isAuthenticated(state) {
+      return state.user ? true : false;
+    },
+  },
   actions: {
     async loginUser({ commit }, credentials) {
       try {
         const { data } = await Vue.prototype.$http.post(
-          'api/login',
+          '/api/login',
           credentials
         );
         commit('setUser', data);
       } catch (err) {
         throw err.response.data;
+      }
+    },
+    async getUser({ commit }) {
+      try {
+        const { data } = await Vue.prototype.$http.get('/api/user/me');
+        commit('setUser', data);
+      } catch (err) {
+        console.log(err.response.data);
       }
     },
     async logoutUser({ commit }) {
@@ -30,7 +43,7 @@ export default new Vuex.Store({
     async registerUser({ commit }, credentials) {
       try {
         const { data } = await Vue.prototype.$http.post(
-          'api/register',
+          '/api/register',
           credentials
         );
 

@@ -34,6 +34,9 @@ app.use(
     store: new MongoStore({
       mongooseConnection: mongoose.connection,
     }),
+    cookie: {
+      httpOnly: false,
+    },
   })
 );
 
@@ -44,7 +47,7 @@ app.use('/api/response', require('./routes/response'));
 app.use('/api/forms', require('./routes/form'));
 app.use('/api/register', ensureGuest, require('./routes/register'));
 app.use('/api/login', ensureGuest, require('./routes/login'));
-app.use('/user/me', ensureAuthenticated, require('./routes/user'));
+app.use('/api/user/me', ensureAuthenticated, require('./routes/user'));
 
 app.delete('/api/logout', ensureAuthenticated, (req, res) => {
   req.logout();

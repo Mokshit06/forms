@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { navbarLinks } from "../data/navigation.json";
+import { navbarLinks } from "../../data/navigation.json";
 
 export default {
   name: "Navbar",
@@ -30,7 +30,7 @@ export default {
   },
   computed: {
     visibleLinks() {
-      if (this.$store.state.user) {
+      if (this.$store.getters.isAuthenticated) {
         return this.links.filter((link) => link.auth === true);
       }
       return this.links.filter((link) => link.guest === true);

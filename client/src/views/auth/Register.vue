@@ -2,8 +2,17 @@
   <v-container fill-height fluid>
     <v-row align="center" justify="center">
       <v-card min-width="400" class="mx-auto px-5 pt-5 pb-5">
-        <v-card-title>Login</v-card-title>
+        <v-card-title class="pb-5">Sign up</v-card-title>
         <v-form>
+          <v-text-field
+            v-model="name"
+            label="Enter your name"
+            :error-messages="nameErrors"
+            @input="$v.name.$touch()"
+            @blur="$v.name.$touch()"
+            required
+            filled
+          />
           <v-text-field
             v-model="email"
             label="Enter your email"
@@ -11,8 +20,8 @@
             @input="$v.email.$touch()"
             @blur="$v.email.$touch()"
             required
-          ></v-text-field>
-
+            filled
+          />
           <v-text-field
             v-model="password"
             label="Enter your password"
@@ -20,9 +29,10 @@
             @input="$v.password.$touch()"
             @blur="$v.password.$touch()"
             required
-          ></v-text-field>
-          <br />
-          <v-btn @click="submit">Log in</v-btn>
+            filled
+            class="pb-2"
+          />
+          <v-btn @click="submit">Sign up</v-btn>
         </v-form>
       </v-card>
     </v-row>
@@ -38,6 +48,9 @@ export default {
   mixins: [validationMixin],
 
   validations: {
+    name: {
+      required,
+    },
     email: {
       required,
       email,
@@ -49,12 +62,19 @@ export default {
 
   data() {
     return {
+      name: "",
       email: "",
       password: "",
     };
   },
 
   computed: {
+    nameErrors() {
+      const errors = [];
+      if (!this.$v.name.$dirty) return errors;
+      !this.$v.name.required && errors.push("Password is required");
+      return errors;
+    },
     emailErrors() {
       const errors = [];
       if (!this.$v.email.$dirty) return errors;
@@ -71,16 +91,17 @@ export default {
   },
 
   methods: {
-    ...mapActions(["loginUser"]),
+    ...mapActions(["registerUser"]),
     async submit() {
       this.$v.$touch();
       try {
-        await this.loginUser({
+        await this.registerUser({
+          name: this.name,
           email: this.email,
           password: this.password,
         });
 
-        this.$router.push("/");
+        // this.$router.push("/");
       } catch (err) {
         console.log(err);
       }

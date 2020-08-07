@@ -19,9 +19,9 @@
       "guest": true
     },
     {
-      "name": "form",
+      "name": "create form",
       "title": "Form",
-      "link": "/forms",
+      "link": "/forms/create",
       "auth": true
     }
   ]

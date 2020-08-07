@@ -6,6 +6,7 @@ router.post('/', ensureAuthenticated, async (req, res) => {
   try {
     req.body.user = req.user.id;
     const { user, fields } = req.body;
+    console.log(fields);
     const newForm = {
       user,
       fields,
@@ -15,8 +16,14 @@ router.post('/', ensureAuthenticated, async (req, res) => {
 
     res.status(201).send(form);
   } catch (error) {
-    res.status(500).send('Something went wrong');
+    next('Something went wrong');
   }
+});
+
+//todo Remove from production
+router.get('/', async (req, res) => {
+  const forms = await Form.find({});
+  res.send(forms);
 });
 
 router.get('/:shortid', async (req, res) => {
@@ -32,7 +39,7 @@ router.get('/:shortid', async (req, res) => {
 
     res.send(form);
   } catch (error) {
-    res.status(500).send('Something went wrong');
+    next('Something went wrong');
   }
 });
 
