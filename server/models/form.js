@@ -12,22 +12,31 @@ const formSchema = new mongoose.Schema({
     type: String,
     default: shortid.generate,
   },
+  title: {
+    type: String,
+    default: 'Untitled form',
+  },
   fields: [
     {
       fieldName: {
         type: String,
-        required: [true, 'Please enter a field name'],
+        default: 'Question',
       },
       fieldType: {
         type: String,
         enum: ['text', 'number'],
+        default: 'text',
       },
       fieldPlaceHolder: {
         type: String,
-        default: 'Enter the input here',
+        default: 'Enter your response here',
       },
     },
   ],
+  createdAt: {
+    type: Number,
+    default: Date.now,
+  },
 });
 
 formSchema.pre('save', function () {

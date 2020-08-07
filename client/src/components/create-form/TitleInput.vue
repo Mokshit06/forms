@@ -5,16 +5,26 @@
         'font-size': '1.6rem',
       }"
       class="pt-2"
-      value="Untitled form"
+      v-model="formTitle"
       flat
       height="50"
       :hide-details="true"
+      @input="$emit('update-title', formTitle)"
     />
   </v-card>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      formTitle: this.title,
+    };
+  },
+  props: {
+    title: String,
+  },
+};
 </script>
 
 <style>

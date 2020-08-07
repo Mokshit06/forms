@@ -14,6 +14,12 @@ router.post('/:shortid', async (req, res) => {
 
     const { respondee, fields } = req.body;
 
+    fields.forEach(field => {
+      if (!field.response) {
+        field.response = 'Not Answered';
+      }
+    });
+
     const newResponse = {
       respondee,
       form: form.id,
@@ -28,7 +34,7 @@ router.post('/:shortid', async (req, res) => {
       if (!fieldsArr.includes(field) && field !== 'Email') {
         newResponse.fields.push({
           fieldName: field,
-          response: '',
+          response: 'Not Answered',
         });
       }
     }

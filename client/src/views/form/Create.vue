@@ -2,7 +2,7 @@
   <div :style="{ 'max-width': '800px' }" class="mx-auto mb-16">
     <v-form @submit.prevent="createForm">
       <v-card class="mt-14">
-        <title-input />
+        <title-input :title="title" @update-title="updateTitle" />
         <text-input
           v-for="field in fields"
           :key="field.id"
@@ -31,6 +31,7 @@ export default {
           id: 0,
         },
       ],
+      title: "Untitled Form",
     };
   },
   components: {
@@ -38,14 +39,6 @@ export default {
     TitleInput,
   },
   methods: {
-    // makeActive(index) {
-    //   console.log(index);
-    //   this.inputs[index].active = !this.inputs[index].active;
-    // },
-    // makeInactive(index) {
-    //   console.log(index);
-    //   this.inputs[index].active = false;
-    // },
     async createForm() {
       const newForm = this.fields.map((field) => ({
         fieldName: field.label,
@@ -56,6 +49,7 @@ export default {
       try {
         const { data: form } = await this.$http.post("/api/forms", {
           fields: newForm,
+          title: this.title,
         });
         console.log(form);
       } catch (err) {
@@ -73,6 +67,10 @@ export default {
 
     updateLabel({ question, id }) {
       this.fields[id].label = question;
+    },
+
+    updateTitle(newTitle) {
+      this.title = newTitle;
     },
   },
 };

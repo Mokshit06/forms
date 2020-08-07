@@ -45,7 +45,7 @@ const routes = [
   {
     path: '/forms/:id',
     name: 'Form',
-    component: () => import('../views/auth/Register.vue'),
+    component: () => import('../views/form/Response.vue'),
   },
 ];
 
