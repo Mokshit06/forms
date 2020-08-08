@@ -118,7 +118,11 @@ export default {
 
         this.$router.push("/");
       } catch (err) {
-        console.log(err);
+        const error = {
+          isThere: true,
+          text: err.response.data,
+        };
+        this.$store.dispatch("setError", error);
       }
     },
   },

@@ -49,10 +49,14 @@ export default {
     async getForms() {
       try {
         const { data: forms } = await this.$http.get("/api/forms");
-        console.log(forms);
+        // console.log(forms);
         this.forms = forms;
       } catch (err) {
-        console.log(err.response.data);
+        const error = {
+          isThere: true,
+          text: err.response.data,
+        };
+        this.$store.dispatch("setError", error);
       }
     },
 
@@ -61,7 +65,11 @@ export default {
         await this.$http.delete(`/api/forms/${id}`);
         this.forms = this.forms.filter((form) => form.shortid !== id);
       } catch (err) {
-        console.log(err.response.data);
+        const error = {
+          isThere: true,
+          text: err.response.data,
+        };
+        this.$store.dispatch("setError", error);
       }
     },
   },

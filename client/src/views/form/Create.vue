@@ -54,7 +54,11 @@ export default {
 
         this.$router.push("/");
       } catch (err) {
-        console.log(err.response.data);
+        const error = {
+          isThere: true,
+          text: err.response.data,
+        };
+        this.$store.dispatch("setError", error);
       }
     },
 

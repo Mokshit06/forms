@@ -66,7 +66,7 @@ router.post('/:shortid', async (req, res, next) => {
   } catch ({ errors }) {
     const error = errors[Object.keys(errors)[0]] || errors;
     const errorMsg = error.properties || error;
-    next(errorMsg.message || errorMsg);
+    res.status(400).json({ error: errorMsg.message || errorMsg });
   }
 });
 

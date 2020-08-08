@@ -96,9 +96,9 @@ export default {
       } catch (err) {
         const error = {
           isThere: true,
-          text: err.response.data.error,
+          text: err.response.data,
         };
-        this.$store.commit("setError", error);
+        this.$store.dispatch("setError", error);
       }
     },
 
