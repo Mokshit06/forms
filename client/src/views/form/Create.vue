@@ -7,9 +7,13 @@
           v-for="field in fields"
           :key="field.id"
           :field="field"
+          :type="field.type"
           @update-label="updateLabel"
         />
-        <v-btn class="mx-6 mb-6 pa-6" @click="createField">Add new</v-btn>
+        <add-btn
+          @create-text="createTextField"
+          @create-date="createDateField"
+        />
       </v-card>
 
       <v-btn type="submit" class="my-5 py-6" block>Create Form</v-btn>
@@ -20,6 +24,7 @@
 <script>
 import TextInput from "../../components/create-form/TextInput";
 import TitleInput from "../../components/create-form/TitleInput";
+import AddBtn from "@/components/AddBtn";
 
 export default {
   data() {
@@ -28,6 +33,7 @@ export default {
         {
           label: "Question",
           active: false,
+          type: "text",
           id: 0,
         },
       ],
@@ -37,12 +43,13 @@ export default {
   components: {
     TextInput,
     TitleInput,
+    AddBtn,
   },
   methods: {
     async createForm() {
       const newForm = this.fields.map((field) => ({
         fieldName: field.label,
-        fieldType: "text",
+        fieldType: field.type,
         fieldPlaceHolder: "Enter your response here",
       }));
 
@@ -62,10 +69,20 @@ export default {
       }
     },
 
-    createField() {
+    createTextField() {
       this.fields.push({
         label: "Question",
         active: false,
+        type: "text",
+        id: this.fields[this.fields.length - 1].id + 1,
+      });
+    },
+
+    createDateField() {
+      this.fields.push({
+        label: "Date",
+        active: false,
+        type: "date",
         id: this.fields[this.fields.length - 1].id + 1,
       });
     },

@@ -2,6 +2,7 @@ const router = require('express').Router();
 const Form = require('../models/form');
 const Response = require('../models/response');
 const { sendResponseEmail } = require('../email/email');
+const moment = require('moment');
 
 router.post('/:shortid', async (req, res, next) => {
   const shortid = req.params.shortid;
@@ -14,7 +15,20 @@ router.post('/:shortid', async (req, res, next) => {
 
     const { respondee, fields } = req.body;
 
-    if (await Response.findOne({ respondee })) {
+    const hasAlreadyAnswered = async () => {
+      try {
+        const form = await Form.findOne({ shortid });
+        const response = await Response.find({ respondee, form: form.id });
+        if (response) {
+          return true;
+        }
+        return false;
+      } catch (error) {
+        next('Something went wrong');
+      }
+    };
+
+    if (hasAlreadyAnswered()) {
       return res
         .status(400)
         .json({ message: 'You can only submit your response once' });
@@ -49,9 +63,14 @@ router.post('/:shortid', async (req, res, next) => {
       return res.status(400).send({ error: 'Invalid fields' });
     }
 
-    const responseTextArr = fields.map(
-      field => `${field.fieldName}: ${field.response}`
-    );
+    const responseTextArr = fields.map(field => {
+      if (field.fieldType === 'date') {
+        return `${field.fieldName}: ${moment(field.response).format(
+          'DD MMMM YYYY'
+        )}`;
+      }
+      return `${field.fieldName} : ${field.response}`;
+    });
 
     await Response.create(newResponse);
 
@@ -66,7 +85,7 @@ router.post('/:shortid', async (req, res, next) => {
   } catch ({ errors }) {
     const error = errors[Object.keys(errors)[0]] || errors;
     const errorMsg = error.properties || error;
-    res.status(400).json({ error: errorMsg.message || errorMsg });
+    res.status(400).json({ message: errorMsg.message || errorMsg });
   }
 });
 

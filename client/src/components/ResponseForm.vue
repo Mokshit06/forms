@@ -22,8 +22,7 @@
       <text-field
         v-for="(field, index) in fields"
         :key="index"
-        :placeholder="field.fieldPlaceHolder"
-        :label="field.fieldName"
+        :field="field"
         :id="index"
         @update-response="updateResponse"
       />
@@ -92,7 +91,7 @@ export default {
           newResponse
         );
 
-        this.submitted = true;
+        this.$emit("make-submit");
       } catch (err) {
         const error = {
           isThere: true,

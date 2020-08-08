@@ -24,8 +24,10 @@ router.post('/', async (req, res) => {
       return res.status(201).send(user);
     });
   } catch (error) {
+    // console.log('error', JSON.parse(JSON.stringify(error.errors)));
+    // console.log('error', error.errors.email);
     res.status(400).json({
-      message: error.errors[Object.keys(error.errors)].properties.message,
+      message: error.errors[Object.keys(error.errors)[0]].properties.message,
     });
   }
 });

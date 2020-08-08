@@ -6,7 +6,13 @@
       :title="form.title"
       :email="form.user.email"
     />
-    <response-form v-else :form="form" :response="response" :fields="fields" />
+    <response-form
+      v-else
+      :form="form"
+      :response="response"
+      :fields="fields"
+      @make-submit="submitted = true"
+    />
   </div>
 </template>
 

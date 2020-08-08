@@ -65,7 +65,7 @@ export default new Vuex.Store({
     setError({ commit }, error) {
       const errorMessage = {
         isThere: error.isThere,
-        text: error.text.message || error.text.error,
+        text: error.text.message || error.text.error || error.message,
       };
       commit('setError', errorMessage);
     },

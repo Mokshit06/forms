@@ -86,7 +86,7 @@ export default {
       } catch (err) {
         const error = {
           isThere: true,
-          text: err.response.data,
+          text: err.message,
         };
         this.$store.dispatch("setError", error);
       }

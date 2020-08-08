@@ -120,7 +120,7 @@ export default {
       } catch (err) {
         const error = {
           isThere: true,
-          text: err.response.data,
+          text: err,
         };
         this.$store.dispatch("setError", error);
       }

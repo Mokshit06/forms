@@ -24,7 +24,7 @@ const formSchema = new mongoose.Schema({
       },
       fieldType: {
         type: String,
-        enum: ['text', 'number'],
+        enum: ['text', 'date'],
         default: 'text',
       },
       fieldPlaceHolder: {
