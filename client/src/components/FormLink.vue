@@ -18,7 +18,7 @@
 
     <v-card-text class="grey--text d-flex justify-space-between">
       Created on {{ date | formatDate }}
-      <v-icon small @click="deleteForm">delete</v-icon>
+      <v-icon dense @click="$emit('delete-form', id)">delete</v-icon>
     </v-card-text>
   </v-card>
 </template>
@@ -43,10 +43,6 @@ export default {
     randomColor() {
       return getColor();
     },
-  },
-  methods: {
-    //todo Create this is backend
-    async deleteForm() {},
   },
 };
 </script>

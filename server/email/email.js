@@ -13,11 +13,16 @@ const sendWelcomeEmail = ({ email, name }) => {
   });
 };
 
-const sendResponseEmail = ({ respondeeEmail, creatorEmail, responseText }) => {
+const sendResponseEmail = ({
+  respondeeEmail,
+  creatorEmail,
+  responseText,
+  formTitle,
+}) => {
   sgMail.send({
     to: creatorEmail,
     from: masterEmail,
-    subject: `${respondeeEmail} responded to your form`,
+    subject: `${respondeeEmail} responded to ${formTitle}`,
     text: responseText,
   });
 };

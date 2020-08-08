@@ -1,40 +1,36 @@
 <template>
-  <v-container fill-height fluid>
-    <v-row align="center" justify="center">
-      <v-card min-width="400" class="mx-auto px-5 pt-5 pb-5">
-        <v-card-title class="pb-5">Login</v-card-title>
-        <v-form>
-          <v-text-field
-            v-model="email"
-            label="Enter your email"
-            :error-messages="emailErrors"
-            @input="$v.email.$touch()"
-            @blur="$v.email.$touch()"
-            required
-            filled
-          ></v-text-field>
+  <base-form type="Login">
+    <v-form @submit.prevent="submit">
+      <v-text-field
+        v-model="email"
+        label="Enter your email"
+        :error-messages="emailErrors"
+        @input="$v.email.$touch()"
+        @blur="$v.email.$touch()"
+        required
+        filled
+      />
 
-          <v-text-field
-            v-model="password"
-            label="Enter your password"
-            :error-messages="passwordErrors"
-            @input="$v.password.$touch()"
-            @blur="$v.password.$touch()"
-            required
-            filled
-            class="pb-2"
-          ></v-text-field>
-          <v-btn @click="submit">Log in</v-btn>
-        </v-form>
-      </v-card>
-    </v-row>
-  </v-container>
+      <v-text-field
+        v-model="password"
+        label="Enter your password"
+        :error-messages="passwordErrors"
+        @input="$v.password.$touch()"
+        @blur="$v.password.$touch()"
+        required
+        filled
+        class="pb-2"
+      />
+      <v-btn type="submit">Log in</v-btn>
+    </v-form>
+  </base-form>
 </template>
 
 <script>
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
 import { mapActions } from "vuex";
+import BaseForm from "@/components/BaseForm";
 
 export default {
   mixins: [validationMixin],
@@ -54,6 +50,10 @@ export default {
       email: "",
       password: "",
     };
+  },
+
+  components: {
+    BaseForm,
   },
 
   computed: {

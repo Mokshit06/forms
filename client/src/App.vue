@@ -3,17 +3,20 @@
     <Navbar />
     <v-main>
       <router-view />
+      <error />
     </v-main>
   </v-app>
 </template>
 
 <script>
 import Navbar from "./components/layout/Navbar";
+import Error from "@/components/error/Error";
 
 export default {
   name: "App",
   components: {
     Navbar,
+    Error,
   },
   // async created() {
   //   if (document.cookie.length > 0) {
@@ -23,3 +26,9 @@ export default {
   // },
 };
 </script>
+
+<style>
+html {
+  overflow: auto !important;
+}
+</style>

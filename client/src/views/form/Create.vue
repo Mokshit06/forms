@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ 'max-width': '800px' }" class="mx-auto mb-16">
+  <div :style="{ 'max-width': '740px' }" class="mx-auto mb-16">
     <v-form @submit.prevent="createForm">
       <v-card class="mt-14">
         <title-input :title="title" @update-title="updateTitle" />
@@ -47,11 +47,12 @@ export default {
       }));
 
       try {
-        const { data: form } = await this.$http.post("/api/forms", {
+        await this.$http.post("/api/forms", {
           fields: newForm,
           title: this.title,
         });
-        console.log(form);
+
+        this.$router.push("/");
       } catch (err) {
         console.log(err.response.data);
       }

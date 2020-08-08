@@ -4,7 +4,7 @@ const ensureAuthenticated = (req, res, next) => {
   }
 
   res
-    .status(400)
+    .status(401)
     .json({ message: 'You need to log in before accessing this page' });
 };
 

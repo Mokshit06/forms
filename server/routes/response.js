@@ -3,7 +3,7 @@ const Form = require('../models/form');
 const Response = require('../models/response');
 const { sendResponseEmail } = require('../email/email');
 
-router.post('/:shortid', async (req, res) => {
+router.post('/:shortid', async (req, res, next) => {
   const shortid = req.params.shortid;
   try {
     const form = await Form.findOne({ shortid }).populate('user');
@@ -13,6 +13,12 @@ router.post('/:shortid', async (req, res) => {
     }
 
     const { respondee, fields } = req.body;
+
+    if (await Response.findOne({ respondee })) {
+      return res
+        .status(400)
+        .json({ message: 'You can only submit your response once' });
+    }
 
     fields.forEach(field => {
       if (!field.response) {
@@ -43,21 +49,24 @@ router.post('/:shortid', async (req, res) => {
       return res.status(400).send({ error: 'Invalid fields' });
     }
 
-    const response = await Response.create(newResponse);
-
     const responseTextArr = fields.map(
       field => `${field.fieldName}: ${field.response}`
     );
+
+    await Response.create(newResponse);
 
     sendResponseEmail({
       respondeeEmail: respondee,
       creatorEmail: form.user.email,
       responseText: responseTextArr.join('\n'),
+      formTitle: form.title,
     });
 
-    res.status(201).send(response);
-  } catch (error) {
-    res.status(500).send(error);
+    res.status(201).send({ message: 'Form submitted' });
+  } catch ({ errors }) {
+    const error = errors[Object.keys(errors)[0]] || errors;
+    const errorMsg = error.properties || error;
+    next(errorMsg.message || errorMsg);
   }
 });
 

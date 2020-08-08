@@ -13,10 +13,10 @@ const responseSchema = new mongoose.Schema({
   },
   respondee: {
     type: String,
-    required: true,
+    required: [true, 'Please enter your email'],
     validate(value) {
       if (!validator.isEmail(value)) {
-        throw new Error('Please enter email');
+        throw new Error('Please enter a valid email');
       }
     },
   },

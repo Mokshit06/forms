@@ -9,10 +9,13 @@
         v-for="(link, i) in visibleLinks"
         :key="i"
         :to="link.link"
-        text
-        style="margin-left: 6px; margin-right: 6px;"
+        class="mx-2"
+        :icon="!!link.icon"
+        :class="{ 'pa-0': !!link.icon }"
+        depressed
       >
         {{ link.name }}
+        <v-icon v-if="link.icon">{{ link.icon }}</v-icon>
       </v-btn>
     </v-app-bar>
   </div>

@@ -19,8 +19,8 @@
       "guest": true
     },
     {
-      "name": "create form",
       "title": "Form",
+      "icon": "add",
       "link": "/forms/create",
       "auth": true
     }

@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const Form = require('../models/form');
-const { ensureAuthenticated, ensureGuest } = require('../middleware/auth');
+const { ensureAuthenticated } = require('../middleware/auth');
 
 router.post('/', ensureAuthenticated, async (req, res) => {
   try {
@@ -23,10 +23,9 @@ router.post('/', ensureAuthenticated, async (req, res) => {
   }
 });
 
-router.get('/', async (req, res, next) => {
+router.get('/', ensureAuthenticated, async (req, res, next) => {
   try {
     const forms = await Form.find({ user: req.user.id });
-    // console.log(forms);
     res.send(forms);
   } catch (error) {
     next('Something went wrong');
@@ -46,6 +45,21 @@ router.get('/:shortid', async (req, res, next) => {
 
     res.send(form);
   } catch (error) {
+    next('Something went wrong');
+  }
+});
+
+router.delete('/:shortid', ensureAuthenticated, async (req, res, next) => {
+  const shortid = req.params.shortid;
+  try {
+    const form = await Form.deleteOne({ shortid, user: req.user.id });
+
+    if (!form) {
+      return res.status(404).send({ message: 'Form not found' });
+    }
+
+    res.send({ message: `${form.title} deleted` });
+  } catch (err) {
     next('Something went wrong');
   }
 });

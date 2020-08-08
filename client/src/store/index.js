@@ -6,15 +6,25 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     user: null,
+    error: {
+      isThere: false,
+      text: '',
+    },
   },
   mutations: {
     setUser(state, user) {
       state.user = user;
     },
+    setError(state, error) {
+      state.error = error;
+    },
   },
   getters: {
     isAuthenticated(state) {
       return state.user ? true : false;
+    },
+    error(state) {
+      return state.error;
     },
   },
   actions: {
@@ -37,7 +47,7 @@ export default new Vuex.Store({
         console.log(err.response.data);
       }
     },
-    async logoutUser({ commit }) {
+    logoutUser({ commit }) {
       commit('setUser', null);
     },
     async registerUser({ commit }, credentials) {
