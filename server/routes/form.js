@@ -6,7 +6,6 @@ router.post('/', ensureAuthenticated, async (req, res) => {
   try {
     req.body.user = req.user.id;
     const { user, fields, title } = req.body;
-    console.log(fields);
     const newForm = {
       user,
       fields,

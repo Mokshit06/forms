@@ -19,7 +19,7 @@ router.post('/:shortid', async (req, res, next) => {
       try {
         const form = await Form.findOne({ shortid });
         const response = await Response.find({ respondee, form: form.id });
-        if (response) {
+        if (response.length > 0) {
           return true;
         }
         return false;
@@ -28,7 +28,7 @@ router.post('/:shortid', async (req, res, next) => {
       }
     };
 
-    if (hasAlreadyAnswered()) {
+    if (await hasAlreadyAnswered()) {
       return res
         .status(400)
         .json({ message: 'You can only submit your response once' });

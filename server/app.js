@@ -1,6 +1,5 @@
 const express = require('express');
 const connectDB = require('./config/mongoose');
-const User = require('./models/user');
 const passport = require('passport');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
@@ -9,8 +8,19 @@ const initializePassport = require('./config/passport');
 const morgan = require('morgan');
 const cors = require('cors');
 const { ensureAuthenticated, ensureGuest } = require('./middleware/auth');
+const history = require('connect-history-api-fallback');
+
+process.env.NODE_ENV = 'production';
 
 const app = express();
+if (process.env.NODE_ENV === 'production') {
+  app.use(history());
+  app.use(express.static(`${__dirname}/public`));
+} else {
+  require('dotenv').config();
+  app.use(morgan('dev'));
+  app.use(cors());
+}
 
 connectDB();
 initializePassport(passport);
@@ -18,13 +28,7 @@ initializePassport(passport);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-const { SESSION_SECRET, NODE_ENV, PORT } = process.env;
-
-if (NODE_ENV !== 'production') {
-  require('dotenv').config();
-  app.use(morgan('dev'));
-  app.use(cors());
-}
+const { SESSION_SECRET, PORT } = process.env;
 
 app.use(
   session({
@@ -56,11 +60,7 @@ app.delete('/api/logout', ensureAuthenticated, (req, res) => {
   });
 });
 
-//todo Remove from production
-app.get('/api', ensureAuthenticated, async (req, res) => {
-  const users = await User.find({});
-  res.send(users);
-});
+app.get('/');
 
 app.use((error, req, res, next) => {
   res.status(500).send({ error });
